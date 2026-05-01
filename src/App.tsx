@@ -302,15 +302,15 @@ export default function App() {
           </div>
           <button 
             onClick={() => setIsSettingsOpen(true)}
-            className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-slate-50 md:bg-transparent rounded-2xl border border-slate-100 md:border-none hover:bg-slate-100 transition-colors group/header"
+            className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-blue-50 md:bg-transparent rounded-2xl border-2 border-blue-100 md:border-none hover:bg-blue-100 transition-all group/header active:scale-95 shadow-sm md:shadow-none"
           >
             <div className="flex items-center gap-2 text-xl md:text-2xl font-mono font-bold text-slate-800 group-hover/header:text-blue-600 transition-colors">
-              <Clock className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+              <Clock className="w-5 h-5 md:w-6 md:h-6 text-blue-600 animate-pulse" />
               <span>{stats.daysLeft} DIAS</span>
             </div>
-            <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold min-w-max flex items-center gap-1">
+            <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold min-w-max flex items-center gap-1">
               META: {format(parseISO(data.deadline), 'dd/MM/yyyy', { locale: ptBR })}
-              <Pencil className="w-2.5 h-2.5 opacity-0 group-hover/header:opacity-100 transition-opacity" />
+              <Pencil className="w-3 h-3 text-blue-600" />
             </div>
           </button>
         </div>
@@ -585,32 +585,35 @@ export default function App() {
                   </div>
 
                   <div className="relative group/slider pt-2">
-                    <div className="w-full bg-slate-200 h-10 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-inner relative">
+                    <div className="w-full bg-slate-100 h-10 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-inner relative">
                       <div 
                         className={cn(
-                          "h-full rounded-r-xl shadow-[4px_0_15px_rgba(0,0,0,0.15)]",
+                          "h-full rounded-r-xl transition-all duration-150 shadow-[4px_0_15px_rgba(0,0,0,0.15)]",
                           item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"
                         )}
                         style={{ width: `${item.progress}%` }}
-                      />
+                      >
+                         <div className="h-full flex items-center justify-end pr-2">
+                           <div className="w-1.5 h-4 bg-white/40 rounded-full blur-[1px]" />
+                         </div>
+                      </div>
                       
-                      {/* Posição Visual do Controle */}
+                      {/* Posição Visual do Marcador */}
                       <div 
-                        className="absolute top-0 bottom-0 w-1 bg-white/50"
+                        className="absolute top-0 bottom-0 w-1 bg-white/60 shadow-[0_0_10px_rgba(255,255,255,1)]"
                         style={{ left: `${item.progress}%` }}
                       />
                     </div>
                     
-                    {/* O Slider real que sobrepõe a barra */}
                     <input 
                       type="range" min="0" max="100" step="1" value={item.progress} 
                       onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer touch-none z-10"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer touch-pan-x z-20"
                     />
 
-                    <div className="flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-widest px-2 mt-2">
+                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest px-1 mt-2 font-mono">
                       <span>0%</span>
-                      <span>{item.progress > 40 && item.progress < 60 ? '' : '50%'}</span>
+                      <span className="text-blue-500/50">SLIDE PARA AJUSTAR</span>
                       <span>100%</span>
                     </div>
                   </div>
