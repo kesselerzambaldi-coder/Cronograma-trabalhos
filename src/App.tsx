@@ -300,15 +300,19 @@ export default function App() {
               Relatório PDF
             </button>
           </div>
-          <div className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-slate-50 md:bg-transparent rounded-2xl border border-slate-100 md:border-none">
-            <div className="flex items-center gap-2 text-xl md:text-2xl font-mono font-bold text-slate-800">
+          <button 
+            onClick={() => setIsSettingsOpen(true)}
+            className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-slate-50 md:bg-transparent rounded-2xl border border-slate-100 md:border-none hover:bg-slate-100 transition-colors group/header"
+          >
+            <div className="flex items-center gap-2 text-xl md:text-2xl font-mono font-bold text-slate-800 group-hover/header:text-blue-600 transition-colors">
               <Clock className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
               <span>{stats.daysLeft} DIAS</span>
             </div>
-            <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold min-w-max">
+            <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold min-w-max flex items-center gap-1">
               META: {format(parseISO(data.deadline), 'dd/MM/yyyy', { locale: ptBR })}
+              <Pencil className="w-2.5 h-2.5 opacity-0 group-hover/header:opacity-100 transition-opacity" />
             </div>
-          </div>
+          </button>
         </div>
       </header>
 
@@ -569,49 +573,45 @@ export default function App() {
 
                 <div className="flex flex-col gap-4 py-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-mono">Status da Atividade</span>
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-mono">Progresso da Obra</span>
                     <div className={cn(
-                      "px-3 py-1 rounded-lg font-mono font-black text-sm shadow-sm border",
+                      "px-4 py-2 rounded-xl font-mono font-black text-lg shadow-md border-2",
                       item.progress === 100 
-                        ? "bg-emerald-100 text-emerald-700 border-emerald-200" 
-                        : "bg-blue-100 text-blue-700 border-blue-200"
+                        ? "bg-emerald-500 text-white border-emerald-600" 
+                        : "bg-blue-600 text-white border-blue-700"
                     )}>
                       {item.progress}%
                     </div>
                   </div>
 
-                  <div className="relative">
-                    <div className="w-full bg-slate-100 h-6 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-inner">
+                  <div className="relative group/slider pt-2">
+                    <div className="w-full bg-slate-200 h-10 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-inner relative">
                       <div 
                         className={cn(
-                          "h-full rounded-r-xl transition-all duration-500 shadow-[2px_0_10px_rgba(0,0,0,0.1)]",
+                          "h-full rounded-r-xl shadow-[4px_0_15px_rgba(0,0,0,0.15)]",
                           item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"
                         )}
                         style={{ width: `${item.progress}%` }}
-                      >
-                        {item.progress > 15 && (
-                          <div className="h-full flex items-center justify-end pr-3">
-                            <div className="w-1.5 h-3 bg-white/30 rounded-full" />
-                          </div>
-                        )}
-                      </div>
+                      />
+                      
+                      {/* Posição Visual do Controle */}
+                      <div 
+                        className="absolute top-0 bottom-0 w-1 bg-white/50"
+                        style={{ left: `${item.progress}%` }}
+                      />
                     </div>
                     
-                    <div className="mt-4 px-1">
-                      <input 
-                        type="range" min="0" max="100" step="1" value={item.progress} 
-                        onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
-                        className="w-full h-8 accent-blue-600 cursor-pointer touch-none"
-                        style={{ 
-                          WebkitAppearance: 'none',
-                          background: 'transparent'
-                        }}
-                      />
-                      <div className="flex justify-between text-[8px] font-black text-slate-300 uppercase tracking-tighter px-1 mt-[-4px]">
-                        <span>Início</span>
-                        <span>50%</span>
-                        <span>Fim</span>
-                      </div>
+                    {/* O Slider real que sobrepõe a barra */}
+                    <input 
+                      type="range" min="0" max="100" step="1" value={item.progress} 
+                      onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer touch-none z-10"
+                    />
+
+                    <div className="flex justify-between text-[9px] font-black text-slate-400 uppercase tracking-widest px-2 mt-2">
+                      <span>0%</span>
+                      <span>{item.progress > 40 && item.progress < 60 ? '' : '50%'}</span>
+                      <span>100%</span>
                     </div>
                   </div>
                 </div>
