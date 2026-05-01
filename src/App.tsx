@@ -584,36 +584,35 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="relative group/slider pt-2">
-                    <div className="w-full bg-slate-100 h-10 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-inner relative">
-                      <div 
+                  <div className="relative group/slider pt-2 pb-4">
+                    <div className="w-full bg-slate-100 h-12 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-inner relative">
+                      <motion.div 
+                        layout
                         className={cn(
-                          "h-full rounded-r-xl transition-all duration-150 shadow-[4px_0_15px_rgba(0,0,0,0.15)]",
+                          "h-full rounded-r-xl shadow-[4px_0_15px_rgba(0,0,0,0.15)]",
                           item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"
                         )}
                         style={{ width: `${item.progress}%` }}
                       >
-                         <div className="h-full flex items-center justify-end pr-2">
-                           <div className="w-1.5 h-4 bg-white/40 rounded-full blur-[1px]" />
+                         <div className="h-full flex items-center justify-end pr-3">
+                           <div className="w-2 h-6 bg-white/40 rounded-full blur-[1px]" />
                          </div>
-                      </div>
+                      </motion.div>
                       
-                      {/* Posição Visual do Marcador */}
-                      <div 
-                        className="absolute top-0 bottom-0 w-1 bg-white/60 shadow-[0_0_10px_rgba(255,255,255,1)]"
-                        style={{ left: `${item.progress}%` }}
-                      />
+                      {/* Marcador de 50% Visual */}
+                      <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-300/30" />
                     </div>
                     
+                    {/* Área de toque expandida para o Slider */}
                     <input 
                       type="range" min="0" max="100" step="1" value={item.progress} 
                       onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer touch-pan-x z-20"
+                      className="absolute -inset-2 w-[calc(100%+1rem)] h-[calc(100%+1rem)] opacity-0 cursor-pointer touch-none z-20"
                     />
 
-                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest px-1 mt-2 font-mono">
+                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mt-2 font-mono">
                       <span>0%</span>
-                      <span className="text-blue-500/50">SLIDE PARA AJUSTAR</span>
+                      <span className="text-blue-500 animate-pulse">ARRASTE PARA ATUALIZAR</span>
                       <span>100%</span>
                     </div>
                   </div>
