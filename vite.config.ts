@@ -6,10 +6,11 @@ import {defineConfig, loadEnv} from 'vite';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: '/',
+    base: './',
     plugins: [react(), tailwindcss()],
     build: {
       outDir: 'dist',
+      assetsDir: 'assets',
       emptyOutDir: true,
     },
     define: {

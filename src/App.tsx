@@ -615,17 +615,15 @@ export default function App() {
                     <input 
                       type="range" min="0" max="100" step="1" value={item.progress} 
                       onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
-                      className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] opacity-0 cursor-pointer touch-none z-20"
+                      className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] opacity-0 cursor-pointer touch-pan-x z-20"
                     />
 
                     <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mt-4 font-mono">
                       <span>Início</span>
-                      <div className="flex items-center gap-2 text-blue-500 animate-bounce">
-                        <span className="text-[8px]">←</span>
-                        <span>AJUSTAR AQUI</span>
-                        <span className="text-[8px]">→</span>
+                      <div className="flex items-center gap-2 text-blue-600 animate-pulse font-bold">
+                        <span>← ARRASTE →</span>
                       </div>
-                      <span>Concluído</span>
+                      <span>100%</span>
                     </div>
                   </div>
                 </div>
@@ -716,9 +714,12 @@ export default function App() {
                       <input 
                         type="date" 
                         value={data.deadline} 
-                        onChange={(e) => setData({...data, deadline: e.target.value})} 
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-black text-slate-800" 
+                        onChange={(e) => {
+                          setData({...data, deadline: e.target.value});
+                        }} 
+                        className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-100 rounded-xl focus:ring-4 focus:ring-blue-200 outline-none font-black text-slate-800 transition-all" 
                       />
+                      <p className="text-[9px] font-mono text-blue-500 mt-2 font-bold uppercase animate-pulse">↻ Atualização automática ao selecionar</p>
                     </div>
                   </div>
 
