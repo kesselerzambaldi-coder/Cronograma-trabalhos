@@ -567,35 +567,52 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 py-2">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">Progresso</span>
-                      <span className="text-sm font-mono font-black text-slate-900">{item.progress}%</span>
+                <div className="flex flex-col gap-4 py-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-mono">Status da Atividade</span>
+                    <div className={cn(
+                      "px-3 py-1 rounded-lg font-mono font-black text-sm shadow-sm border",
+                      item.progress === 100 
+                        ? "bg-emerald-100 text-emerald-700 border-emerald-200" 
+                        : "bg-blue-100 text-blue-700 border-blue-200"
+                    )}>
+                      {item.progress}%
                     </div>
-                    <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border-2 border-slate-200 shadow-inner mb-3">
+                  </div>
+
+                  <div className="relative">
+                    <div className="w-full bg-slate-100 h-6 rounded-2xl overflow-hidden border-2 border-slate-200 shadow-inner">
                       <div 
                         className={cn(
-                          "h-full rounded-full transition-all duration-700",
+                          "h-full rounded-r-xl transition-all duration-500 shadow-[2px_0_10px_rgba(0,0,0,0.1)]",
                           item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"
                         )}
                         style={{ width: `${item.progress}%` }}
-                      />
+                      >
+                        {item.progress > 15 && (
+                          <div className="h-full flex items-center justify-end pr-3">
+                            <div className="w-1.5 h-3 bg-white/30 rounded-full" />
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <input 
-                      type="range" min="0" max="100" step="5" value={item.progress} 
-                      onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
-                      className="w-full accent-blue-600 h-2 cursor-pointer"
-                    />
-                  </div>
-                  <div className="w-12 h-12 shrink-0 flex items-center justify-center">
-                    {item.progress === 100 ? (
-                      <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-                    ) : item.progress > 0 ? (
-                      <Clock className="w-8 h-8 text-blue-600 animate-pulse" />
-                    ) : (
-                      <div className="w-3 h-3 rounded-full bg-slate-200" />
-                    )}
+                    
+                    <div className="mt-4 px-1">
+                      <input 
+                        type="range" min="0" max="100" step="1" value={item.progress} 
+                        onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
+                        className="w-full h-8 accent-blue-600 cursor-pointer touch-none"
+                        style={{ 
+                          WebkitAppearance: 'none',
+                          background: 'transparent'
+                        }}
+                      />
+                      <div className="flex justify-between text-[8px] font-black text-slate-300 uppercase tracking-tighter px-1 mt-[-4px]">
+                        <span>Início</span>
+                        <span>50%</span>
+                        <span>Fim</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
