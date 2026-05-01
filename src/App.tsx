@@ -698,11 +698,11 @@ export default function App() {
                     <h3 className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">01. IDENTIDADE</h3>
                     <div>
                       <label className="text-[10px] font-bold uppercase text-slate-400 block mb-2">Título Principal</label>
-                      <input type="text" value={data.title} onChange={(e) => setData({...data, title: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold" />
+                      <input type="text" value={data.title} onChange={(e) => setData(prev => ({...prev, title: e.target.value}))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold" />
                     </div>
                     <div>
                       <label className="text-[10px] font-bold uppercase text-slate-400 block mb-2">Subtítulo / Especialidade</label>
-                      <input type="text" value={data.subtitle} onChange={(e) => setData({...data, subtitle: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold text-blue-600" />
+                      <input type="text" value={data.subtitle} onChange={(e) => setData(prev => ({...prev, subtitle: e.target.value}))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold text-blue-600" />
                     </div>
                   </div>
 
@@ -715,11 +715,11 @@ export default function App() {
                         type="date" 
                         value={data.deadline} 
                         onChange={(e) => {
-                          setData({...data, deadline: e.target.value});
+                          setData(prev => ({...prev, deadline: e.target.value}));
                         }} 
                         className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-100 rounded-xl focus:ring-4 focus:ring-blue-200 outline-none font-black text-slate-800 transition-all" 
                       />
-                      <p className="text-[9px] font-mono text-blue-500 mt-2 font-bold uppercase animate-pulse">↻ Atualização automática ao selecionar</p>
+                      <p className="text-[9px] font-mono text-blue-500 mt-2 font-bold uppercase">↻ Atualização automática ao selecionar</p>
                     </div>
                   </div>
 
