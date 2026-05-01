@@ -302,15 +302,15 @@ export default function App() {
           </div>
           <button 
             onClick={() => setIsSettingsOpen(true)}
-            className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-blue-50 md:bg-transparent rounded-2xl border-2 border-blue-200 md:border-none hover:bg-blue-100 active:scale-[0.98] transition-all group/header shadow-md md:shadow-none"
+            className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-blue-600 md:bg-transparent rounded-2xl border-2 border-blue-700 md:border-none hover:bg-blue-700 md:hover:bg-blue-50 active:scale-[0.98] transition-all group/header shadow-lg shadow-blue-200 md:shadow-none"
           >
-            <div className="flex items-center gap-2 text-xl md:text-2xl font-mono font-bold text-slate-800 group-hover/header:text-blue-700 transition-colors">
-              <Clock className="w-5 h-5 md:w-6 md:h-6 text-blue-600 animate-pulse" />
+            <div className="flex items-center gap-2 text-xl md:text-2xl font-mono font-black text-white md:text-slate-800 group-hover/header:text-white md:group-hover/header:text-blue-700 transition-colors">
+              <Clock className="w-5 h-5 md:w-6 md:h-6 text-blue-200 md:text-blue-600 animate-pulse" />
               <span>{stats.daysLeft} DIAS</span>
             </div>
-            <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-slate-600 font-black min-w-max flex items-center gap-1 bg-white/50 px-2 py-0.5 rounded-lg border border-blue-100">
+            <div className="text-[9px] md:text-[10px] font-mono uppercase tracking-widest text-blue-100 md:text-slate-600 font-bold min-w-max flex items-center gap-1 bg-blue-800/20 md:bg-slate-100 px-2 py-1 rounded-lg border border-blue-400/30 md:border-slate-200">
               META: {format(parseISO(data.deadline), 'dd/MM/yyyy', { locale: ptBR })}
-              <Pencil className="w-2.5 h-2.5 text-blue-600 ml-1" />
+              <Pencil className="w-2.5 h-2.5 text-white md:text-blue-600 ml-1" />
             </div>
           </button>
         </div>
@@ -590,36 +590,42 @@ export default function App() {
                   </div>
 
                   <div className="relative pt-2 pb-6">
-                    <div className="w-full bg-slate-200 h-14 rounded-2xl overflow-hidden border-2 border-slate-300 shadow-inner relative">
+                    <div className="w-full bg-slate-200 h-16 rounded-3xl overflow-hidden border-4 border-white shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] relative">
                       <motion.div 
                         initial={false}
                         animate={{ width: `${item.progress}%` }}
-                        transition={{ type: 'spring', bounce: 0, duration: 0.1 }}
+                        transition={{ type: 'spring', bounce: 0, duration: 0.15 }}
                         className={cn(
-                          "h-full rounded-r-xl shadow-[4px_0_15px_rgba(0,0,0,0.25)]",
+                          "h-full rounded-r-2xl shadow-[6px_0_20px_rgba(0,0,0,0.3)] relative overflow-hidden",
                           item.progress === 100 ? "bg-emerald-500" : "bg-blue-600"
                         )}
                       >
+                         {/* Efeito de brilho na barra */}
+                         <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
                          <div className="h-full flex items-center justify-end pr-4">
-                           <div className="w-3 h-8 bg-white/40 rounded-full blur-[1px]" />
+                           <div className="w-4 h-10 bg-white/50 rounded-full blur-[1px] shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
                          </div>
                       </motion.div>
                       
-                      {/* Marcador de 50% Visual */}
-                      <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-white/20 z-0" />
+                      {/* Marcador Central de 50% */}
+                      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-0.5 h-6 bg-slate-300/40 z-0" />
                     </div>
                     
-                    {/* Área de toque expandida para o Slider */}
+                    {/* Slider Invisível mas super responsivo */}
                     <input 
                       type="range" min="0" max="100" step="1" value={item.progress} 
                       onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
-                      className="absolute -inset-2 w-[calc(100%+1rem)] h-[calc(100%+2rem)] opacity-0 cursor-pointer touch-none z-20"
+                      className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] opacity-0 cursor-pointer touch-none z-20"
                     />
 
-                    <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mt-3 font-mono">
-                      <span>0%</span>
-                      <span className="text-blue-500 animate-pulse font-bold">DESLIZE PARA ATUALIZAR</span>
-                      <span>100%</span>
+                    <div className="flex justify-between items-center text-[10px] font-black text-slate-400 uppercase tracking-widest px-2 mt-4 font-mono">
+                      <span>Início</span>
+                      <div className="flex items-center gap-2 text-blue-500 animate-bounce">
+                        <span className="text-[8px]">←</span>
+                        <span>AJUSTAR AQUI</span>
+                        <span className="text-[8px]">→</span>
+                      </div>
+                      <span>Concluído</span>
                     </div>
                   </div>
                 </div>
