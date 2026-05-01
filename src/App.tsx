@@ -708,9 +708,23 @@ export default function App() {
                     </div>
                   </div>
 
+                  {/* Cronograma */}
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">02. CRONOGRAMA</h3>
+                    <div>
+                      <label className="text-[10px] font-bold uppercase text-slate-400 block mb-2">Data Limite (Meta Final)</label>
+                      <input 
+                        type="date" 
+                        value={data.deadline} 
+                        onChange={(e) => setData({...data, deadline: e.target.value})} 
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-black text-slate-800" 
+                      />
+                    </div>
+                  </div>
+
                   {/* Gerenciar Categorias */}
                   <div className="space-y-4">
-                    <h3 className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">02. CATEGORIAS (SESSÕES)</h3>
+                    <h3 className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">03. CATEGORIAS (SESSÕES)</h3>
                     
                     <div className="flex gap-2">
                        <input 
