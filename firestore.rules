@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // --- Validation Blueprints ---
+    function isValidActivity(activity) {
+      return activity.id is string && activity.id.size() <= 128
+        && activity.name is string && activity.name.size() <= 200
+        && activity.section is string && activity.section.size() <= 100
+        && activity.progress is number && activity.progress >= 0 && activity.progress <= 100;
+    }
+
+    function isValidSection(section) {
+      return section.id is string && section.id.size() <= 100
+        && section.name is string && section.name.size() <= 100;
+    }
+
+    function isValidMaintenanceData(data) {
+      return data.title is string && data.title.size() <= 100
+        && data.subtitle is string && data.subtitle.size() <= 100
+        && data.deadline is string && data.deadline.size() <= 20
+        && data.sections is list
+        && data.activities is list
+        && (data.updatedAt == null || data.updatedAt is string);
+    }
+
+    // --- Collection Routes ---
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      
+      // We use 'write' instead of split create/update for the single-doc sync pattern
+      allow write: if isOwner(userId) && isValidMaintenanceData(incoming());
+    }
+  }
+}

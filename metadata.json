@@ -1,6 +1,6 @@
 {
   "name": "Disa Maintenance Manager",
-  "description": "A professional dashboard for tracking and managing electrical and automation maintenance activities for the DISA Modularization Project, tracking progress toward the June 20th deadline.",
+  "description": "A professional dashboard for tracking and managing electrical and automation maintenance activities for the DISA Modularization Project. Includes multi-device synchronization via Google Cloud.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }

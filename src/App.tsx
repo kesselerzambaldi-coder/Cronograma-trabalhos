@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   BarChart3, 
@@ -24,7 +24,11 @@ import {
   X,
   Pencil,
   Settings2,
-  Save
+  Save,
+  LogIn,
+  LogOut,
+  User as UserIcon,
+  RefreshCw
 } from 'lucide-react';
 import { format, differenceInDays, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -33,13 +37,17 @@ import autoTable from 'jspdf-autotable';
 import { INITIAL_DATA } from './constants';
 import { Activity, MaintenanceData } from './types';
 import { cn } from './lib/utils';
+import { auth, googleProvider, signInWithPopup, signOut } from './firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { saveToFirebase, subscribeToFirebaseData } from './services/firebaseSync';
 
 export default function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthReady, setIsAuthReady] = useState(false);
   const [data, setData] = useState<MaintenanceData>(() => {
     const saved = localStorage.getItem('disa_maintenance_data');
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Migração para incluir títulos se não existirem
       return { 
         title: INITIAL_DATA.title, 
         subtitle: INITIAL_DATA.subtitle, 
@@ -48,6 +56,64 @@ export default function App() {
     }
     return INITIAL_DATA;
   });
+
+  const lastFirebaseUpdate = useRef<string | null>(null);
+  const isInternalChange = useRef(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setIsAuthReady(true);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const unsubscribe = subscribeToFirebaseData(user.uid, (remoteData) => {
+      // Comparar timestamps para evitar loops e garantir a versão mais recente
+      if (remoteData.updatedAt !== lastFirebaseUpdate.current) {
+        lastFirebaseUpdate.current = remoteData.updatedAt || null;
+        isInternalChange.current = true;
+        setData(remoteData);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem('disa_maintenance_data', JSON.stringify(data));
+    
+    if (user && !isInternalChange.current) {
+      const timeout = setTimeout(async () => {
+        try {
+          await saveToFirebase(user.uid, data);
+        } catch (error) {
+          console.error("Erro ao sincronizar com Firebase:", error);
+        }
+      }, 1000); // Debounce de 1s para o servidor
+      return () => clearTimeout(timeout);
+    }
+    
+    isInternalChange.current = false;
+  }, [data, user]);
+
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      alert("Erro ao conectar com Google. Tente novamente.");
+    }
+  };
+
+  const handleLogout = () => {
+    if (confirm("Deseja sair da conta? Os dados permanecerão no seu dispositivo.")) {
+      signOut(auth);
+    }
+  };
 
   const [activeSectionId, setActiveSectionId] = useState<string | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -70,10 +136,6 @@ export default function App() {
     setSettingsFocus(focus);
     setIsSettingsOpen(true);
   };
-
-  useEffect(() => {
-    localStorage.setItem('disa_maintenance_data', JSON.stringify(data));
-  }, [data]);
 
   const stats = useMemo(() => {
     const total = data.activities.length;
@@ -275,13 +337,47 @@ export default function App() {
               {data.title} <br />
               <span className="text-blue-600 italic">{data.subtitle}</span>
             </h1>
-            <button 
-              onClick={() => setIsSettingsOpen(true)}
-              className="p-2.5 bg-slate-50 md:bg-transparent hover:bg-slate-100 rounded-xl transition-colors mt-1"
-              title="Editar Título"
-            >
-              <Settings2 className="w-5 h-5 text-slate-400 hover:text-blue-600" />
-            </button>
+            <div className="flex flex-col gap-2">
+              <button 
+                onClick={() => setIsSettingsOpen(true)}
+                className="p-2.5 bg-slate-50 md:bg-transparent hover:bg-slate-100 rounded-xl transition-colors"
+                title="Configurações do Projeto"
+              >
+                <Settings2 className="w-5 h-5 text-slate-400 hover:text-blue-600" />
+              </button>
+              
+              {user ? (
+                <div className="flex items-center gap-2 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-100 group relative">
+                  {user.photoURL ? (
+                    <img src={user.photoURL} alt={user.displayName || ''} className="w-6 h-6 rounded-full border border-emerald-200" referrerPolicy="no-referrer" />
+                  ) : (
+                    <UserIcon className="w-6 h-6 text-emerald-600" />
+                  )}
+                  <div className="hidden group-hover:block absolute top-full left-0 mt-2 bg-white shadow-xl rounded-xl p-2 z-50 border border-slate-100 min-w-[150px]">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase px-2 mb-1">Conta Ativa</p>
+                    <p className="text-[11px] font-bold text-slate-700 px-2 truncate mb-2">{user.email}</p>
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 p-2 hover:bg-red-50 text-red-600 rounded-lg transition-all text-[10px] font-bold uppercase"
+                    >
+                      <LogOut className="w-4 h-4" /> Sair
+                    </button>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-black font-mono text-emerald-600 uppercase leading-none">Sincronizado</span>
+                    <span className="text-[10px] font-bold text-slate-700 truncate max-w-[80px]">{user.displayName?.split(' ')[0]}</span>
+                  </div>
+                </div>
+              ) : (
+                <button 
+                  onClick={handleLogin}
+                  className="flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all font-bold text-[10px] uppercase"
+                >
+                  <LogIn className="w-4 h-4" /> 
+                  <span className="hidden sm:inline">Entrar</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 

@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Section": {
+      "title": "Section",
+      "description": "A category section in the project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" }
+      },
+      "required": ["id", "name"]
+    },
+    "Activity": {
+      "title": "Activity",
+      "description": "A single maintenance activity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "section": { "type": "string" },
+        "progress": { "type": "number" },
+        "material": { "type": "string" },
+        "pending": { "type": "string" },
+        "duration": { "type": "number" },
+        "who": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["id", "name", "section", "progress"]
+    },
+    "MaintenanceData": {
+      "title": "MaintenanceData",
+      "description": "The entire project state",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "deadline": { "type": "string" },
+        "sections": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } }
+        },
+        "activities": {
+          "type": "array",
+          "items": { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "section": { "type": "string" }, "progress": { "type": "number" }, "material": { "type": "string" }, "pending": { "type": "string" }, "duration": { "type": "number" }, "who": { "type": "string" }, "date": { "type": "string", "nullable": true } } }
+        },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "subtitle", "deadline", "sections", "activities"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "MaintenanceData",
+      "description": "The user's project data"
+    }
+  }
+}

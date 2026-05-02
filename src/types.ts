@@ -27,4 +27,5 @@ export interface MaintenanceData {
   activities: Activity[];
   sections: Section[];
   deadline: string;
+  updatedAt?: string;
 }
