@@ -352,7 +352,7 @@ export default function App() {
   return (
     <div className="min-h-screen pb-20 bg-slate-50">
       {/* Header */}
-      <header className="bg-white border-b border-brand-line px-5 md:px-6 py-8 md:py-10 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
+      <header className="bg-white border-b-2 border-slate-900 px-5 md:px-6 py-8 md:py-10 flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
         <div className="group relative">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-[10px] font-mono uppercase tracking-widest text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded">
@@ -380,7 +380,7 @@ export default function App() {
                   ) : (
                     <UserIcon className="w-6 h-6 text-emerald-600" />
                   )}
-                  <div className="hidden group-hover:block absolute top-full left-0 mt-2 bg-white shadow-xl rounded-xl p-2 z-50 border border-slate-100 min-w-[150px]">
+                  <div className="hidden group-hover:block absolute top-full left-0 mt-2 bg-white shadow-xl rounded-xl p-2 z-50 border-2 border-slate-900 min-w-[150px]">
                     <p className="text-[10px] font-bold text-slate-400 uppercase px-2 mb-1">Conta Ativa</p>
                     <p className="text-[11px] font-bold text-slate-700 px-2 truncate mb-2">{user.email}</p>
                     <button 
@@ -416,14 +416,14 @@ export default function App() {
 
         <div className="flex flex-col items-start md:items-end gap-6">
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
-            <label className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 text-slate-700 text-[10px] font-bold uppercase transition-all rounded-xl hover:bg-blue-600 hover:text-white cursor-pointer touch-manipulation">
+            <label className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 text-slate-700 text-[10px] font-bold uppercase transition-all rounded-xl border-2 border-slate-900 hover:bg-slate-900 hover:text-white cursor-pointer touch-manipulation">
               <Download className="w-4 h-4 rotate-180" />
               Importar
               <input type="file" accept=".json" onChange={importJSON} className="hidden" />
             </label>
             <button 
               onClick={exportToJSON}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 text-slate-700 text-[10px] font-bold uppercase transition-all rounded-xl hover:bg-blue-600 hover:text-white touch-manipulation"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-slate-100 text-slate-700 text-[10px] font-bold uppercase transition-all rounded-xl border-2 border-slate-900 hover:bg-slate-900 hover:text-white touch-manipulation"
             >
               <FileJson className="w-4 h-4" />
               JSON
@@ -442,14 +442,14 @@ export default function App() {
                   alert('✓ Salvo localmente! Entre com sua conta Google para sincronizar entre dispositivos.');
                 }
               }}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-emerald-200 transition-all rounded-xl hover:bg-emerald-700 touch-manipulation"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-emerald-200 transition-all rounded-xl border-2 border-emerald-800 hover:bg-emerald-700 touch-manipulation"
             >
               <Save className="w-4 h-4" />
               Salvar
             </button>
             <button 
               onClick={exportToPDF}
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-blue-200 transition-all rounded-xl hover:bg-blue-700 touch-manipulation"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-blue-200 transition-all rounded-xl border-2 border-blue-900 hover:bg-blue-700 touch-manipulation"
             >
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">Relatório</span> PDF
@@ -472,8 +472,8 @@ export default function App() {
       </header>
 
       {/* Stats Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-3 border-b border-brand-line bg-white shadow-sm mx-4 md:mx-6 mt-[-1.5rem] md:mt-[-2rem] rounded-2xl md:rounded-3xl overflow-hidden z-10 relative">
-        <div className="p-6 md:p-8 md:border-r border-brand-line">
+      <section className="grid grid-cols-1 md:grid-cols-3 border-2 border-slate-900 bg-white shadow-sm mx-4 md:mx-6 mt-[-1.5rem] md:mt-[-2rem] rounded-2xl md:rounded-3xl overflow-hidden z-10 relative">
+        <div className="p-6 md:p-8 md:border-r-2 border-slate-900">
           <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 mb-3 md:mb-4 font-bold flex items-center gap-2">
             <BarChart3 className="w-4 h-4" /> 01. PROGRESSO TOTAL
           </div>
@@ -490,7 +490,7 @@ export default function App() {
           </div>
         </div>
 
-        <div className="p-6 md:p-8 md:border-r border-brand-line">
+        <div className="p-6 md:p-8 md:border-r-2 border-slate-900">
           <div className="text-[10px] font-mono uppercase tracking-widest text-slate-400 mb-3 md:mb-4 font-bold flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" /> 02. ENTREGAS CONCLUÍDAS
           </div>
@@ -524,15 +524,15 @@ export default function App() {
       </section>
 
       {/* Controls */}
-      <div className="sticky top-0 bg-slate-50/90 backdrop-blur-xl z-20 border-b border-slate-200 px-4 md:px-6 py-4 md:py-6 flex flex-col md:flex-row gap-4 md:gap-6 items-center justify-between mt-4">
+      <div className="sticky top-0 bg-slate-50/90 backdrop-blur-xl z-20 border-b-2 border-slate-900 px-4 md:px-6 py-4 md:py-6 flex flex-col md:flex-row gap-4 md:gap-6 items-center justify-between mt-4">
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-hide no-scrollbar">
           <button 
             onClick={() => setActiveSectionId('all')}
             className={cn(
               "whitespace-nowrap px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all shadow-sm border touch-manipulation",
               activeSectionId === 'all' 
-                ? "bg-blue-600 text-white border-blue-600 shadow-blue-200" 
-                : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
+                ? "bg-blue-600 text-white border-2 border-slate-900 shadow-blue-200" 
+                : "bg-white text-slate-500 border-2 border-slate-900 hover:border-slate-900"
             )}
           >
             TODAS
@@ -553,7 +553,7 @@ export default function App() {
           ))}
         </div>
 
-        <div className="relative w-full md:w-80 shadow-sm rounded-xl overflow-hidden border border-slate-200 bg-white group focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+        <div className="relative w-full md:w-80 shadow-sm rounded-xl overflow-hidden border-2 border-slate-900 bg-white group focus-within:ring-2 focus-within:ring-blue-100 transition-all">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input 
             type="text" 
@@ -568,10 +568,10 @@ export default function App() {
       {/* Table Section (Desktop) / Card Section (Mobile) */}
       <main className="px-4 md:px-6 py-4 md:py-8">
         {/* Desktop Table View */}
-        <div className="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="hidden md:block bg-white rounded-2xl shadow-sm border-2 border-slate-900 overflow-hidden">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-slate-50/50 border-b border-slate-200">
+              <tr className="bg-slate-50/50 border-b-2 border-slate-900">
                 <th className="text-[9px] font-bold uppercase tracking-widest text-left py-5 px-6 text-slate-400">Status</th>
                 <th className="text-[9px] font-bold uppercase tracking-widest text-left py-5 px-6 text-slate-400">Atividade</th>
                 <th className="text-[9px] font-bold uppercase tracking-widest text-left py-5 px-6 text-slate-400 w-48">Progresso</th>
@@ -581,7 +581,7 @@ export default function App() {
                 <th className="text-[9px] font-bold uppercase tracking-widest text-right py-5 px-6 text-slate-400 w-24">Ações</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y-2 divide-slate-900">
               <AnimatePresence mode="popLayout">
                 {filteredActivities.map((item) => (
                   <motion.tr 
@@ -594,16 +594,16 @@ export default function App() {
                   >
                     <td className="py-6 px-6">
                       {item.progress === 100 ? (
-                        <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shadow-sm border-2 border-emerald-300">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 shadow-sm border-2 border-slate-900">
                            <CheckCircle2 className="w-6 h-6" />
                         </div>
                       ) : item.progress > 0 ? (
-                        <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 relative overflow-hidden border-2 border-blue-300 shadow-sm">
+                        <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center text-blue-700 relative overflow-hidden border-2 border-slate-900 shadow-sm">
                            <div className="absolute inset-0 bg-blue-600/20 animate-pulse" />
                            <Clock className="w-5 h-5 z-10" />
                         </div>
                       ) : (
-                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 border-2 border-slate-200 shadow-sm">
+                        <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 border-2 border-slate-900 shadow-sm">
                            <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                         </div>
                       )}
@@ -618,7 +618,7 @@ export default function App() {
                     </td>
                     <td className="py-6 px-6">
                       <div className="flex items-center gap-4">
-                        <div className="flex-1 bg-slate-200 h-4 rounded-full overflow-hidden border-2 border-slate-300 shadow-inner">
+                        <div className="flex-1 bg-slate-200 h-4 rounded-full overflow-hidden border-2 border-slate-900 shadow-inner">
                           <div 
                             className={cn(
                               "h-full rounded-full transition-all duration-700 shadow-lg",
@@ -643,20 +643,20 @@ export default function App() {
                       </div>
                     </td>
                     <td className="py-6 px-6">
-                      <span className="text-[10px] font-bold text-slate-600 px-2 py-1 bg-slate-100 rounded-md border border-slate-200">
+                      <span className="text-[10px] font-bold text-slate-600 px-2 py-1 bg-slate-100 rounded-md border-2 border-slate-900">
                         {item.who || 'Pendente'}
                       </span>
                     </td>
                     <td className="py-6 px-6">
                       <div className="flex flex-col gap-2 max-w-[200px]">
                         {item.material && (
-                           <div className="flex items-center gap-2 bg-blue-100 px-2 py-1.5 rounded-lg border-2 border-blue-200 shadow-sm">
+                           <div className="flex items-center gap-2 bg-blue-100 px-2 py-1.5 rounded-lg border-2 border-slate-900 shadow-sm">
                              <LayoutGrid className="w-3.5 h-3.5 text-blue-800 shrink-0" />
                              <span className="text-[11px] font-bold leading-tight text-blue-900">{item.material}</span>
                            </div>
                         )}
                         {item.pending && item.pending !== 'ok' && (
-                          <div className="flex items-center gap-2 text-red-800 bg-red-100 px-2 py-2 rounded-xl border-2 border-red-300 shadow-md animate-pulse">
+                          <div className="flex items-center gap-2 text-red-800 bg-red-100 px-2 py-2 rounded-xl border-2 border-slate-900 shadow-md animate-pulse">
                             <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
                             <span className="text-[10px] font-black uppercase leading-tight tracking-tighter">{item.pending}</span>
                           </div>
@@ -701,7 +701,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 key={item.id}
-                className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col gap-4"
+                className="bg-white rounded-2xl p-5 border-2 border-slate-900 shadow-sm flex flex-col gap-4"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex flex-col">
@@ -784,11 +784,11 @@ export default function App() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-[10px] font-bold uppercase">
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <div className="bg-slate-50 p-3 rounded-xl border-2 border-slate-900">
                     <span className="text-slate-400 block mb-1 font-mono">Resposável</span>
                     <span className="text-slate-700">{item.who || '---'}</span>
                   </div>
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <div className="bg-slate-50 p-3 rounded-xl border-2 border-slate-900">
                     <span className="text-slate-400 block mb-1 font-mono">Duração (H-H)</span>
                     <span className="text-slate-700">{item.duration} DIAS</span>
                   </div>
@@ -816,8 +816,8 @@ export default function App() {
         </div>
         
         {filteredActivities.length === 0 && (
-          <div className="py-20 md:py-32 text-center bg-slate-50/50 rounded-2xl border-2 border-dashed border-slate-200 mt-4">
-            <p className="font-mono text-xs text-slate-400 font-bold uppercase tracking-widest bg-white px-6 py-3 border border-slate-200 inline-block rounded-2xl shadow-sm italic">
+          <div className="py-20 md:py-32 text-center bg-slate-50/50 rounded-2xl border-2 border-dashed border-slate-900 mt-4">
+            <p className="font-mono text-xs text-slate-400 font-bold uppercase tracking-widest bg-white px-6 py-3 border-2 border-slate-900 inline-block rounded-2xl shadow-sm italic">
               Nenhuma atividade localizada
             </p>
           </div>
@@ -853,11 +853,11 @@ export default function App() {
                     <h3 className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">01. IDENTIDADE</h3>
                     <div>
                       <label className="text-[10px] font-bold uppercase text-slate-400 block mb-2">Título Principal</label>
-                      <input type="text" value={data.title} onChange={(e) => setData(prev => ({...prev, title: e.target.value}))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold" />
+                      <input type="text" value={data.title} onChange={(e) => setData(prev => ({...prev, title: e.target.value}))} className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-900 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold" />
                     </div>
                     <div>
                       <label className="text-[10px] font-bold uppercase text-slate-400 block mb-2">Subtítulo / Especialidade</label>
-                      <input type="text" value={data.subtitle} onChange={(e) => setData(prev => ({...prev, subtitle: e.target.value}))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold text-blue-600" />
+                      <input type="text" value={data.subtitle} onChange={(e) => setData(prev => ({...prev, subtitle: e.target.value}))} className="w-full px-4 py-3 bg-slate-50 border-2 border-slate-900 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none font-bold text-blue-600" />
                     </div>
                   </div>
 
@@ -901,11 +901,11 @@ export default function App() {
                         value={newSectionName}
                         onChange={(e) => setNewSectionName(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddSection()}
-                        className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium" 
+                        className="flex-1 px-4 py-3 bg-slate-50 border-2 border-slate-900 rounded-xl focus:ring-2 focus:ring-blue-100 outline-none text-sm font-medium" 
                        />
                        <button 
                         onClick={handleAddSection}
-                        className="p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-100"
+                        className="p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-100 border-2 border-slate-900"
                        >
                          <Plus className="w-5 h-5" />
                        </button>
@@ -940,7 +940,7 @@ export default function App() {
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
-            <motion.div initial={{ opacity: 0, scale: 1, y: '100%' }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 1, y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 300 }} className="relative bg-white w-full max-w-xl overflow-hidden border-t md:border border-slate-200 shadow-2xl rounded-t-[2.5rem] md:rounded-[2.5rem]">
+            <motion.div initial={{ opacity: 0, scale: 1, y: '100%' }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 1, y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 300 }} className="relative bg-white w-full max-w-xl overflow-hidden border-t-2 border-slate-900 shadow-2xl rounded-t-[2.5rem] md:rounded-[2.5rem]">
               <div className="px-6 md:px-8 py-5 md:py-6 flex items-center justify-between border-b border-slate-100 bg-slate-50/50">
                 <h2 className="text-[10px] md:text-xs font-black uppercase font-mono tracking-widest text-slate-800 italic">
                   {editingId ? 'Editar Atividade' : 'Nova Atividade'}
@@ -953,35 +953,35 @@ export default function App() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                   <div className="md:col-span-2">
                     <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Nome da Atividade</label>
-                    <input required type="text" value={formTask.name} onChange={(e) => setFormTask({ ...formTask, name: e.target.value })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-blue-100/50 outline-none transition-all placeholder:text-slate-300" placeholder="Ex: Montagem do Quadro" />
+                    <input required type="text" value={formTask.name} onChange={(e) => setFormTask({ ...formTask, name: e.target.value })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3 rounded-2xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-blue-100/50 outline-none transition-all placeholder:text-slate-300" placeholder="Ex: Montagem do Quadro" />
                   </div>
                   <div>
                     <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Sessão / Módulo</label>
-                    <select value={formTask.section} onChange={(e) => setFormTask({ ...formTask, section: e.target.value })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3.5 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all appearance-none">
+                    <select value={formTask.section} onChange={(e) => setFormTask({ ...formTask, section: e.target.value })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3.5 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all appearance-none">
                       {data.sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                     </select>
                   </div>
                   <div>
                     <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Célula / Equipe</label>
-                    <input type="text" value={formTask.who} onChange={(e) => setFormTask({ ...formTask, who: e.target.value })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" placeholder="Responsável" />
+                    <input type="text" value={formTask.who} onChange={(e) => setFormTask({ ...formTask, who: e.target.value })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" placeholder="Responsável" />
                   </div>
                   <div className="md:col-span-2 grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Estimativa (Dias)</label>
-                      <input type="number" step="0.5" value={formTask.duration} onChange={(e) => setFormTask({ ...formTask, duration: parseFloat(e.target.value) })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" />
+                      <input type="number" step="0.5" value={formTask.duration} onChange={(e) => setFormTask({ ...formTask, duration: parseFloat(e.target.value) })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" />
                     </div>
                     <div>
                       <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Progresso (%)</label>
-                      <input type="number" min="0" max="100" value={formTask.progress} onChange={(e) => setFormTask({ ...formTask, progress: parseInt(e.target.value) })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" />
+                      <input type="number" min="0" max="100" value={formTask.progress} onChange={(e) => setFormTask({ ...formTask, progress: parseInt(e.target.value) })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3 rounded-2xl text-sm font-bold text-slate-900 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Materiais</label>
-                    <input type="text" value={formTask.material} onChange={(e) => setFormTask({ ...formTask, material: e.target.value })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" />
+                    <input type="text" value={formTask.material} onChange={(e) => setFormTask({ ...formTask, material: e.target.value })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" />
                   </div>
                   <div>
                     <label className="text-[10px] font-bold uppercase text-slate-400 mb-1.5 block ml-1">Pendências</label>
-                    <input type="text" value={formTask.pending} onChange={(e) => setFormTask({ ...formTask, pending: e.target.value })} className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" placeholder="'ok' se limpo" />
+                    <input type="text" value={formTask.pending} onChange={(e) => setFormTask({ ...formTask, pending: e.target.value })} className="w-full bg-slate-50 border-2 border-slate-900 px-4 py-3 rounded-2xl text-sm font-bold text-slate-700 outline-none focus:ring-4 focus:ring-blue-100/50 transition-all" placeholder="'ok' se limpo" />
                   </div>
                 </div>
                 <button type="submit" className="mt-4 w-full bg-blue-600 text-white font-black uppercase text-[10px] md:text-xs py-5 rounded-3xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 tracking-[0.2em] touch-manipulation">
