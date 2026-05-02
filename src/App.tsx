@@ -23,7 +23,8 @@ import {
   FileText,
   X,
   Pencil,
-  Settings2
+  Settings2,
+  Save
 } from 'lucide-react';
 import { format, differenceInDays, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -52,6 +53,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settingsFocus, setSettingsFocus] = useState<'general' | 'deadline'>('general');
   const [newSectionName, setNewSectionName] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formTask, setFormTask] = useState<Partial<Activity>>({
@@ -63,6 +65,11 @@ export default function App() {
     duration: 1,
     who: ''
   });
+
+  const openSettings = (focus: 'general' | 'deadline' = 'general') => {
+    setSettingsFocus(focus);
+    setIsSettingsOpen(true);
+  };
 
   useEffect(() => {
     localStorage.setItem('disa_maintenance_data', JSON.stringify(data));
@@ -293,15 +300,25 @@ export default function App() {
               JSON
             </button>
             <button 
+              onClick={() => {
+                localStorage.setItem('disa_maintenance_data', JSON.stringify(data));
+                alert('✓ Dados salvos e sincronizados com sucesso!');
+              }}
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-emerald-200 transition-all rounded-xl hover:bg-emerald-700 touch-manipulation"
+            >
+              <Save className="w-4 h-4" />
+              Salvar
+            </button>
+            <button 
               onClick={exportToPDF}
-              className="w-full md:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-blue-200 transition-all rounded-xl hover:bg-blue-700 touch-manipulation"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-blue-200 transition-all rounded-xl hover:bg-blue-700 touch-manipulation"
             >
               <FileText className="w-4 h-4" />
-              Relatório PDF
+              <span className="hidden sm:inline">Relatório</span> PDF
             </button>
           </div>
           <button 
-            onClick={() => setIsSettingsOpen(true)}
+            onClick={() => openSettings('deadline')}
             className="w-full md:text-right flex md:flex-col justify-between items-center md:items-end p-4 bg-blue-600 md:bg-transparent rounded-2xl border-2 border-blue-700 md:border-none hover:bg-blue-700 md:hover:bg-blue-50 active:scale-[0.98] transition-all group/header shadow-lg shadow-blue-200 md:shadow-none"
           >
             <div className="flex items-center gap-2 text-xl md:text-2xl font-mono font-black text-white md:text-slate-800 group-hover/header:text-white md:group-hover/header:text-blue-700 transition-colors">
@@ -475,7 +492,7 @@ export default function App() {
                         <div className="flex items-center gap-2">
                            <input 
                             type="range" min="0" max="100" step="5" value={item.progress} 
-                            onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
+                            onInput={(e: any) => updateActivityProgress(item.id, parseInt(e.target.value))}
                             className="hidden group-hover:block w-16 accent-blue-700 h-2 cursor-pointer"
                           />
                           <span className={cn(
@@ -614,7 +631,7 @@ export default function App() {
                     {/* Slider Invisível mas super responsivo */}
                     <input 
                       type="range" min="0" max="100" step="1" value={item.progress} 
-                      onChange={(e) => updateActivityProgress(item.id, parseInt(e.target.value))}
+                      onInput={(e: any) => updateActivityProgress(item.id, parseInt(e.target.value))}
                       className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] opacity-0 cursor-pointer touch-pan-x z-20"
                     />
 
@@ -707,19 +724,31 @@ export default function App() {
                   </div>
 
                   {/* Cronograma */}
-                  <div className="space-y-4">
-                    <h3 className="text-[10px] font-bold uppercase text-blue-600 tracking-wider">02. CRONOGRAMA</h3>
+                  <div className={cn(
+                    "space-y-4 p-6 rounded-3xl border-2 transition-all",
+                    settingsFocus === 'deadline' 
+                      ? "bg-blue-100/50 border-blue-400 ring-4 ring-blue-100 shadow-xl" 
+                      : "bg-blue-50/50 border-blue-100"
+                  )}>
+                    <h3 className="text-[10px] font-black uppercase text-blue-700 tracking-wider flex items-center gap-2 font-mono">
+                      <Calendar className={cn("w-4 h-4", settingsFocus === 'deadline' && "animate-bounce")} /> 
+                      {settingsFocus === 'deadline' ? 'AQUI: AJUSTAR META' : '02. PRAZO E META'}
+                    </h3>
                     <div>
-                      <label className="text-[10px] font-bold uppercase text-slate-400 block mb-2">Data Limite (Meta Final)</label>
+                      <label className="text-[9px] font-black uppercase text-slate-500 block mb-2 tracking-widest">
+                        Alterar Data de Entrega Final
+                      </label>
                       <input 
                         type="date" 
                         value={data.deadline} 
                         onChange={(e) => {
                           setData(prev => ({...prev, deadline: e.target.value}));
                         }} 
-                        className="w-full px-4 py-3 bg-blue-50 border-2 border-blue-100 rounded-xl focus:ring-4 focus:ring-blue-200 outline-none font-black text-slate-800 transition-all" 
+                        className="w-full px-5 py-4 bg-white border-2 border-blue-200 rounded-2xl focus:ring-4 focus:ring-blue-100 outline-none font-black text-slate-800 transition-all text-lg shadow-sm" 
                       />
-                      <p className="text-[9px] font-mono text-blue-500 mt-2 font-bold uppercase">↻ Atualização automática ao selecionar</p>
+                      <p className="text-[9px] font-mono text-blue-600 mt-3 font-bold uppercase flex items-center gap-2">
+                         <CheckCircle2 className="w-3 h-3" /> Atualizado em tempo real no dashboard
+                      </p>
                     </div>
                   </div>
 
