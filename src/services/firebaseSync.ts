@@ -4,10 +4,12 @@ import { MaintenanceData } from '../types';
 
 export const saveToFirebase = async (uid: string, data: MaintenanceData) => {
   const userDocRef = doc(db, 'users', uid);
+  const updatedAt = new Date().toISOString();
   await setDoc(userDocRef, {
     ...data,
-    updatedAt: new Date().toISOString()
+    updatedAt
   });
+  return updatedAt;
 };
 
 export const subscribeToFirebaseData = (uid: string, callback: (data: MaintenanceData) => void) => {

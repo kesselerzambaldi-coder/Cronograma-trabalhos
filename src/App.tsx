@@ -87,13 +87,18 @@ export default function App() {
     localStorage.setItem('disa_maintenance_data', JSON.stringify(data));
     
     if (user && !isInternalChange.current) {
+      setIsSyncing(true);
       const timeout = setTimeout(async () => {
         try {
-          await saveToFirebase(user.uid, data);
+          const newTs = await saveToFirebase(user.uid, data);
+          lastFirebaseUpdate.current = newTs;
+          console.log("Sincronizado com sucesso as", newTs);
         } catch (error) {
           console.error("Erro ao sincronizar com Firebase:", error);
+        } finally {
+          setIsSyncing(false);
         }
-      }, 1000); // Debounce de 1s para o servidor
+      }, 1000);
       return () => clearTimeout(timeout);
     }
     
@@ -102,19 +107,32 @@ export default function App() {
 
   const handleLogin = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      alert("Erro ao conectar com Google. Tente novamente.");
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log("Login realizado com sucesso:", result.user.email);
+    } catch (error: any) {
+      console.error("Erro detalhado do Firebase Auth:", error);
+      
+      if (error.code === 'auth/unauthorized-domain') {
+        alert("ERRO DE DOMÍNIO: Você precisa adicionar 'cronograma-trabalhos.vercel.app' aos domínios autorizados no Firebase Console (Autenticação > Configurações > Domínios Autorizados).");
+      } else if (error.code === 'auth/popup-blocked') {
+        alert("O seu navegador bloqueou o popup de login. Por favor, permita popups para este site.");
+      } else {
+        alert(`Erro ao conectar com Google: ${error.message}`);
+      }
     }
   };
 
-  const handleLogout = () => {
-    if (confirm("Deseja sair da conta? Os dados permanecerão no seu dispositivo.")) {
-      signOut(auth);
+  const handleLogout = async () => {
+    if (confirm("Deseja sair da conta? Os dados permanecerão salvos na nuvem.")) {
+      try {
+        await signOut(auth);
+      } catch (error) {
+        console.error("Erro ao sair:", error);
+      }
     }
   };
 
+  const [isSyncing, setIsSyncing] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -141,7 +159,16 @@ export default function App() {
     const total = data.activities.length;
     const completed = data.activities.filter(a => a.progress === 100).length;
     const avgProgress = total > 0 ? data.activities.reduce((acc, a) => acc + a.progress, 0) / total : 0;
-    const daysLeft = differenceInDays(parseISO(data.deadline), new Date());
+    
+    let daysLeft = 0;
+    try {
+      const deadlineDate = parseISO(data.deadline);
+      if (deadlineDate && !isNaN(deadlineDate.getTime())) {
+        daysLeft = differenceInDays(deadlineDate, new Date());
+      }
+    } catch (e) {
+      console.error("Erro ao calcular data:", e);
+    }
     
     return { total, completed, avgProgress, daysLeft };
   }, [data]);
@@ -364,7 +391,13 @@ export default function App() {
                     </button>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[8px] font-black font-mono text-emerald-600 uppercase leading-none">Sincronizado</span>
+                    <span className={cn(
+                      "text-[8px] font-black font-mono uppercase leading-none flex items-center gap-1",
+                      isSyncing ? "text-amber-500 animate-pulse" : "text-emerald-600"
+                    )}>
+                      {isSyncing ? <RefreshCw className="w-2 h-2 animate-spin" /> : null}
+                      {isSyncing ? 'Sincronizando...' : 'Sincronizado'}
+                    </span>
                     <span className="text-[10px] font-bold text-slate-700 truncate max-w-[80px]">{user.displayName?.split(' ')[0]}</span>
                   </div>
                 </div>
@@ -396,9 +429,18 @@ export default function App() {
               JSON
             </button>
             <button 
-              onClick={() => {
+              onClick={async () => {
                 localStorage.setItem('disa_maintenance_data', JSON.stringify(data));
-                alert('✓ Dados salvos e sincronizados com sucesso!');
+                if (user) {
+                  try {
+                    await saveToFirebase(user.uid, data);
+                    alert('✓ Sincronizado com a Nuvem!');
+                  } catch (e) {
+                    alert('✓ Salvo localmente! (Erro ao sincronizar com nuvem)');
+                  }
+                } else {
+                  alert('✓ Salvo localmente! Entre com sua conta Google para sincronizar entre dispositivos.');
+                }
               }}
               className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 text-white text-[10px] font-bold uppercase shadow-lg shadow-emerald-200 transition-all rounded-xl hover:bg-emerald-700 touch-manipulation"
             >
@@ -588,7 +630,7 @@ export default function App() {
                         <div className="flex items-center gap-2">
                            <input 
                             type="range" min="0" max="100" step="5" value={item.progress} 
-                            onInput={(e: any) => updateActivityProgress(item.id, parseInt(e.target.value))}
+                            onChange={(e: any) => updateActivityProgress(item.id, parseInt(e.target.value))}
                             className="hidden group-hover:block w-16 accent-blue-700 h-2 cursor-pointer"
                           />
                           <span className={cn(
@@ -727,7 +769,7 @@ export default function App() {
                     {/* Slider Invisível mas super responsivo */}
                     <input 
                       type="range" min="0" max="100" step="1" value={item.progress} 
-                      onInput={(e: any) => updateActivityProgress(item.id, parseInt(e.target.value))}
+                      onChange={(e: any) => updateActivityProgress(item.id, parseInt(e.target.value))}
                       className="absolute -inset-4 w-[calc(100%+2rem)] h-[calc(100%+2rem)] opacity-0 cursor-pointer touch-pan-x z-20"
                     />
 
